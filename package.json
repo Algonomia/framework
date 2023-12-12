@@ -1,0 +1,35 @@
+{
+    "name": "@algonomia/framework",
+    "version": "0.0.1",
+    "description": "Utils and miscellaneous for Algonomia TS development",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "build": "npx webpack",
+        "test": "jest",
+        "postinstall": "npm run build || echo 'Nothing to do'"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Algonomia/framework.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "files": [
+        "dist"
+    ],
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org"
+    },
+    "dependencies": {
+        "util": "^0.12.5"
+    },
+    "devDependencies": {
+        "@types/jest": "^29.2.6",
+        "ts-jest": "^29.0.5",
+        "typescript": "~5.1.6",
+        "ts-loader": "^9.4.2",
+        "webpack": "^5.88.2",
+        "webpack-cli": "^5.0.1"
+    }
+}
