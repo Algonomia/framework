@@ -35,8 +35,11 @@ Import the functions you need from the library:
 
 ```typescript
 import { functionName } from '@algonomia/framework';
+```
+
 You can then use the function in your TypeScript code:
 
+```
 const result = functionName(args);
 ```
 
