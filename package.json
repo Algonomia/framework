@@ -22,7 +22,8 @@
         "registry": "https://registry.npmjs.org"
     },
     "dependencies": {
-        "util": "^0.12.5"
+        "util": "^0.12.5",
+        "mathjs": "^11.11.0"
     },
     "devDependencies": {
         "@types/jest": "^29.2.6",
