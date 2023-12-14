@@ -1,25 +1,25 @@
-import {BigNumber} from 'mathjs';
+import { BigNumber } from 'mathjs';
 import * as math from 'mathjs';
-import {CurrencyChange} from './currency-exchange.model';
+import { CurrencyChange } from './currency-exchange.model';
 
 export class MoneyType {
-
-    static moneyTypeParser(key: string, jsonObject: {[key: string]: any}): MoneyType|undefined {
-        if (jsonObject[key] === undefined) {
-            return undefined;
-        }
-        if (typeof jsonObject[key] === 'number' || !isNaN(Number(jsonObject[key]))) {
-            return new MoneyType(math.bignumber(jsonObject[key]));
-        }
-        if (Object.keys(jsonObject[key]).includes('amount')) {
-            return new MoneyType(math.bignumber(jsonObject[key].amount), String(jsonObject[key].currency));
-        }
-        throw new Error('Wrong type for key "' + key + '", should be: MoneyType or number');
-    }
-
     constructor(public amount: BigNumber, public currency?: string) {}
 
-    public toJSON() {
+    static moneyTypeParser(key: string, jsonObject: {[key: string]: any}): MoneyType | undefined {
+        const value = jsonObject[key];
+        if (value === undefined) {
+            return undefined;
+        }
+        if (typeof value === 'number' || !isNaN(Number(value))) {
+            return new MoneyType(math.bignumber(value));
+        }
+        if (Object.keys(value).includes('amount')) {
+            return new MoneyType(math.bignumber(value.amount), String(value.currency));
+        }
+        throw new Error(`Wrong type for key "${key}", should be: MoneyType or number`);
+    }
+
+    toJSON() {
         return {
             amount: math.number(this.amount),
             currency: this.currency
@@ -30,14 +30,14 @@ export class MoneyType {
         return new MoneyType(this.amount, this.currency);
     }
 
-    public add(money: (MoneyType|undefined)[], options?: {currencyChange?: CurrencyChange, targetCurrency?: string}): MoneyType {
+    public add(money: (MoneyType | undefined)[], options?: { currencyChange?: CurrencyChange, targetCurrency?: string }): MoneyType {
         const addFunc = (a: any, b: any) => math.add(a, b);
-        return this._modify(addFunc, options.currencyChange, options.targetCurrency, ...money);
+        return this._modify(addFunc, options?.currencyChange, options?.targetCurrency, ...money);
     }
 
-    public subtract(money: (MoneyType|undefined)[], options?: {currencyChange?: CurrencyChange, targetCurrency?: string}): MoneyType {
-        const addFunc = (a: any, b: any) => math.subtract(a, b);
-        return this._modify(addFunc, options.currencyChange, options.targetCurrency, ...money);
+    public subtract(money: (MoneyType | undefined)[], options?: { currencyChange?: CurrencyChange, targetCurrency?: string }): MoneyType {
+        const subtractFunc = (a: any, b: any) => math.subtract(a, b);
+        return this._modify(subtractFunc, options?.currencyChange, options?.targetCurrency, ...money);
     }
 
     public invert(): MoneyType {
@@ -48,7 +48,7 @@ export class MoneyType {
         return new MoneyType(math.prod(coefficient, this.amount), this.currency);
     }
 
-    private _modify(operatorFunc: (a: any, b: any) => BigNumber, currencyChange?: CurrencyChange, targetCurrency?: string, ...money: (MoneyType|undefined)[]): MoneyType {
+    private _modify(operatorFunc: (a: any, b: any) => BigNumber, currencyChange?: CurrencyChange, targetCurrency?: string, ...money: (MoneyType | undefined)[]): MoneyType {
         const currChange = currencyChange ?? CurrencyChange.getDefaultCurrencyChange();
         const homogenizeMoneyPBT = currChange.homogenizeMoney(targetCurrency ?? this.currency,
             [this, ...money].reduce((a: any, b, idx) => {
