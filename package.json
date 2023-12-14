@@ -1,6 +1,6 @@
 {
     "name": "@algonomia/framework",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "Utils and miscellaneous for Algonomia TS development",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
